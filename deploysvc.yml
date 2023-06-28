@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tomcat
+  labels:
+    app: myapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      name: tomcat
+      labels:
+        app: myapp
+    spec:
+      containers:
+        - name: tomcat-app
+          image: 385685296160.dkr.ecr.us-east-2.amazonaws.com/aws_k8s_image:Version_1
+          ports:
+            - containerPort: 8080
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: tomcat-app-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: myapp
+  ports:
+    - port: 8080
+      targetPort: 8080
